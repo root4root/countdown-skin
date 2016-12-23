@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+        <title>Countdown skin demo</title>
+
+        <link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+        
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="js/jquery.plugin.min.js"></script>
+        <script src="js/jquery.countdown.min.js"></script>
+        <!--<script src="js/jquery.countdown-en.js"></script>--><!--  Localisation -->
+
+        <script>
+            (function($){
+                $(function () {
+                    var curtime = new Date(); //If ajax fail, get time from user machine.
+                    
+                    var time = function() { //See countdown serverSync property.
+                        return curtime; 
+                    };
+                
+                    $.ajax({
+                        url: 'time.php', //get time from server. Keep in mind timezone.
+                        dataType: 'text', 
+                        success: function(text) { 
+                            curtime = new Date(text);
+                        },
+                        complete: function() {
+                            $('#defaultCountdown').countdown({
+                                until: +22118400, //256 days left =)
+                                serverSync: time,
+                                compact: false,
+                                layout: '<div class="days"><span class="image{d100}"></span><span class="image{d10}"></span><span class="image{d1}"></span>{dl}</div>' + 
+                                    '<span class="imageSpace"></span>' + 
+                                    '<div class="seconds"><span class="image{h10}"></span><span class="image{h1}"></span>{hl}</div>' + 
+                                    '<span class="imageSep"></span>' + 
+                                    '<div class="seconds"><span class="image{m10}"></span><span class="image{m1}"></span>{ml}</div>' + 
+                                    '<span class="imageSep"></span>' + 
+                                    '<div class="seconds"><span class="image{s10}"></span><span class="image{s1}"></span>{sl}</div>'
+                            }); 
+                        }
+                    }); 
+                });
+            })(jQuery);
+        </script>
+    </head>
+
+    <body>
+        <div class="container">
+            <div id="defaultCountdown"></div>
+        </div>
+    </body>
+    
+</html>
